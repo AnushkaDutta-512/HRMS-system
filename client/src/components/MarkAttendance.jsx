@@ -15,7 +15,7 @@ const MarkAttendance = () => {
 
   const handleMark = async () => {
     try {
-      const res = await axios.post('http://localhost:3036/api/attendance/mark', {
+      const res = await axios.post('https://hrms-system-9nvh.onrender.com/api/attendance/mark', {
         userId: user.id || user._id,
         name: user.name,
         email: user.email,

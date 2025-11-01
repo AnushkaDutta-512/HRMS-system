@@ -9,7 +9,7 @@ const ProfileCard = () => {
   useEffect(() => {
     if (user?.id) {
       axios
-        .get(`http://localhost:3036/api/auth/employee/${user.id}`)
+        .get(`https://hrms-system-9nvh.onrender.com/api/auth/employee/${user.id}`)
         .then((res) => {
           setProfilePic(res.data.profilePic);
           setUserData(res.data);
@@ -28,7 +28,7 @@ const ProfileCard = () => {
     formData.append('profilePic', file);
 
     try {
-      await axios.post(`http://localhost:3036/api/profile/upload/${user.id}`, formData, {
+      await axios.post(`https://hrms-system-9nvh.onrender.com/api/profile/upload/${user.id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       alert('✅ Profile picture uploaded!');

@@ -1,60 +1,45 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
+const XLSX = require('xlsx');
 const path = require('path');
-const SalarySlip = require('../models/SalarySlip');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); 
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
+// GET salary slips from Excel dynamically
+router.get('/slips/:userId', (req, res) => {
+  const { userId } = req.params;
 
-const upload = multer({ storage });
-router.post('/upload', upload.single('slip'), async (req, res) => {
   try {
-    console.log('📩 Incoming upload request');
-    console.log('📦 req.body:', req.body);
-    console.log('📎 req.file:', req.file);
+    // Correct path to your Excel file
+    const workbook = XLSX.readFile(path.join(__dirname, '../uploads/book1.xlsx'));
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(sheet);
 
-    const { userId, month } = req.body;
-    const mongoose = require('mongoose');
+    // Filter by Emp ID from Excel
+    const userSlips = data.filter(row => row['Emp ID'] === userId);
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-    return res.status(400).json({ msg: 'Invalid user ID format' });
+    if (userSlips.length === 0) {
+      return res.status(404).json({ message: 'No salary slips found for this user.' });
     }
 
+    const slips = userSlips.map(row => ({
+      month: row["Month"],
+      netSalary: row["Net Salary"],
+      details: [
+        { component: "Basic Salary", amount: row["Basic Salary"] },
+        { component: "HRA", amount: row["HRA"] },
+        { component: "Conveyance", amount: row["Conveyance"] },
+        { component: "Medical", amount: row["Medical"] },
+        { component: "Provident Fund", amount: row["Provident Fund"] },
+        { component: "Bonus", amount: row["Bonus"] },
+        { component: "Deductions", amount: row["Deductions"] },
+        { component: "Remarks", amount: row["Remarks"] }
+      ]
+    }));
 
-    if (!req.file) {
-      return res.status(400).json({ msg: 'No file uploaded' });
-    }
-
-    const slip = new SalarySlip({
-      userId,
-      month,
-      filePath: req.file.filename
-    });
-
-    await slip.save();
-    res.status(201).json({ msg: 'Slip uploaded', slip });
-  } catch (err) {
-    console.error('❌ Upload error:', err); 
-    res.status(500).json({ msg: 'Upload failed', error: err.message });
+    res.json(slips);
+  } catch (error) {
+    console.error('Error reading salary slips:', error);
+    res.status(500).json({ message: 'Failed to read salary slips from Excel.' });
   }
 });
-router.get('/user/:userId', async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const slips = await SalarySlip.find({ userId });
-    res.json({ slips });
-  } catch (err) {
-    res.status(500).json({ msg: 'Failed to fetch slips', error: err.message });
-  }
-});
-
 
 module.exports = router;

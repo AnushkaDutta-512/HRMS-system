@@ -12,10 +12,27 @@ const salarySlipSchema = new mongoose.Schema({
   },
   filePath: {
     type: String,
+    required: false,
+  },
+  basicPay: {
+    type: Number,
+    required: true,
+  },
+  allowances: {
+    type: Number,
+    required: true,
+  },
+  deductions: {
+    type: Number,
+    required: true,
+  },
+  netSalary: {
+    type: Number,
     required: true,
   },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-module.exports = mongoose.model('SalarySlip', salarySlipSchema);
+// ✅ Prevent OverwriteModelError
+module.exports = mongoose.models.SalarySlip || mongoose.model('SalarySlip', salarySlipSchema);

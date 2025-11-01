@@ -1,7 +1,6 @@
 import React from 'react';
-import './App.css';
-import { Routes, Route } from 'react-router-dom';
-
+import './App.css'; 
+import { Routes, Route } from 'react-router-dom'; 
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import AdminCreateEmployee from './components/AdminCreateEmployee';
@@ -19,135 +18,137 @@ import Welcome from './components/Welcome';
 import AdminDashboard from './components/AdminDashboard';
 import EmployeeAllowanceForm from './components/EmployeeAllowanceForm';
 import AdminAllowancePanel from './components/AdminAllowancePanel';
+import ChangePassword from './components/ChangePassword';
 
 function App() {
-  return (
-    <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Login />} />
-
-        <Route
-          path="/welcome"
-          element={
-            <PrivateRoute roles={['admin', 'employee']}>
-              <Welcome />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin-dashboard"
-          element={
-            <PrivateRoute roles={['admin']}>
-              <AdminDashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/upload"
-          element={
-            <PrivateRoute roles={['admin']}>
-              <UploadSlip />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/leave-requests"
-          element={
-            <PrivateRoute roles={['admin']}>
-              <LeaveRequests />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/attendance-records"
-          element={
-            <PrivateRoute roles={['admin']}>
-              <AttendanceRecords />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/all-employees"
-          element={
-            <PrivateRoute roles={['admin']}>
-              <AllEmployees />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin-allowance"
-          element={
-            <PrivateRoute roles={['admin']}>
-              <AdminAllowancePanel />
-            </PrivateRoute>
-          }
-        />
-
-
-        <Route
-          path="/create-employee"
-          element={
-            <PrivateRoute roles={['admin']}>
-              <AdminCreateEmployee />
-            </PrivateRoute>
-          }
-        />
-
-       
-        <Route
-          path="/apply-leave"
-          element={
-            <PrivateRoute roles={['employee']}>
-              <ApplyLeave />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/mark-attendance"
-          element={
-            <PrivateRoute roles={['employee']}>
-              <MarkAttendance />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/my-leaves"
-          element={
-            <PrivateRoute roles={['employee']}>
-              <LeaveStatus />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/apply-allowance"
-          element={
-            <PrivateRoute roles={['employee']}>
-              <EmployeeAllowanceForm />
-            </PrivateRoute>
-          }
-        />
-
-       
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute roles={['employee', 'admin']}>
-              <ProfileCard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/slips"
-          element={
-            <PrivateRoute roles={['employee', 'admin']}>
-              <SlipList />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </>
-  );
+    return (
+        <>
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<Login />} />
+                <Route
+                    path="/welcome"
+                    element={
+                        <PrivateRoute roles={['admin', 'employee']}>
+                            <Welcome />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/change-password"
+                    element={
+                        <PrivateRoute roles={['admin', 'employee']}> {/* Both roles can change password */}
+                            <ChangePassword />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <PrivateRoute roles={['employee', 'admin']}>
+                            <ProfileCard />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/slips"
+                    element={
+                        <PrivateRoute roles={['employee', 'admin']}>
+                            <SlipList />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/admin-dashboard"
+                    element={
+                        <PrivateRoute roles={['admin']}>
+                            <AdminDashboard />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/upload"
+                    element={
+                        <PrivateRoute roles={['admin']}>
+                            <UploadSlip />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/leave-requests"
+                    element={
+                        <PrivateRoute roles={['admin']}>
+                            <LeaveRequests />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/attendance-records"
+                    element={
+                        <PrivateRoute roles={['admin']}>
+                            <AttendanceRecords />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/all-employees"
+                    element={
+                        <PrivateRoute roles={['admin']}>
+                            <AllEmployees />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/admin-allowance"
+                    element={
+                        <PrivateRoute roles={['admin']}>
+                            <AdminAllowancePanel />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/create-employee"
+                    element={
+                        <PrivateRoute roles={['admin']}>
+                            <AdminCreateEmployee />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/apply-leave"
+                    element={
+                        <PrivateRoute roles={['employee']}>
+                            <ApplyLeave />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/mark-attendance"
+                    element={
+                        <PrivateRoute roles={['employee']}>
+                            <MarkAttendance />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/my-leaves"
+                    element={
+                        <PrivateRoute roles={['employee']}>
+                            <LeaveStatus />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/apply-allowance"
+                    element={
+                        <PrivateRoute roles={['employee']}>
+                            <EmployeeAllowanceForm />
+                        </PrivateRoute>
+                    }
+                />
+            </Routes>
+        </>
+    );
 }
 
 export default App;

@@ -9,7 +9,6 @@ const Welcome = () => {
 
   if (user?.role === 'admin') {
     tiles.push(
-      { label: 'Upload Slip', icon: '📄', sub: 'Upload monthly salary slips', route: '/upload' },
       { label: 'Leave Requests', icon: '📥', sub: 'Review employee leave requests', route: '/leave-requests' },
       { label: 'Attendance Records', icon: '🗓️', sub: 'View and manage attendance logs', route: '/attendance-records' },
       { label: 'All Employees', icon: '👥', sub: 'View all registered employees', route: '/all-employees' },
@@ -29,7 +28,7 @@ const Welcome = () => {
   }
 
   tiles.push({
-    label: 'View Slips',
+    label: 'View  Salary Slips',
     icon: '💰',
     sub: 'Access your salary slips',
     route: '/slips'

@@ -11,7 +11,7 @@ const AttendanceRecords = () => {
 
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:3036/api/attendance/all');
+        const res = await axios.get('https://hrms-system-9nvh.onrender.com/api/attendance/all');
         setRecords(res.data.records);
       } catch (err) {
         setMsg('❌ Failed to load attendance records.');

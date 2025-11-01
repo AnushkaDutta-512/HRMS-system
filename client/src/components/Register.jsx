@@ -16,7 +16,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:3036/api/auth/register', {
+      const res = await axios.post('https://hrms-system-9nvh.onrender.com/api/auth/register', {
         name,
         email,
         password,

@@ -1,33 +1,45 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const LeaveStatus = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const [leaves, setLeaves] = useState([]);
-  const [msg, setMsg] = useState('');
-
+  const [message, setMessage] = useState(''); 
+  const [error, setError] = useState('');   
   useEffect(() => {
+    setMessage('');
+    setError('');
+
     if (!user || user.role !== 'employee') {
-      setMsg('❌ Access denied');
+      setError('❌ Access denied. Only employees can view their leave status.');
       return;
     }
 
     const fetchLeaves = async () => {
       try {
-        const res = await axios.get(`http://localhost:3036/api/leave/user/${user.id}`);
-        setLeaves(res.data.leaves);
+        const token = localStorage.getItem('token');
+        if (!token) {
+          setError('Authentication token not found. Please log in again.');
+          return;
+        }
+
+        const res = await axios.get(`http://localhost:3036/api/leave/my`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+         setLeaves(res.data);
       } catch (err) {
-        setMsg('❌ Error fetching leave data');
+        console.error('Error fetching leave data:', err);
+        setError(err.response?.data?.message || '❌ Error fetching leave data.');
       }
     };
 
     fetchLeaves();
-  }, [user]);
-
-  if (msg) {
+  }, [user]); 
+  if (error) {
     return (
       <p className="text-red-600 text-center mt-10 text-lg font-semibold">
-        {msg}
+        {error}
       </p>
     );
   }
@@ -38,11 +50,16 @@ const LeaveStatus = () => {
         My Leave History
       </h2>
 
+      {message && (
+        <p className="text-green-600 mb-4 text-center font-medium">{message}</p>
+      )}
+
       {leaves.length > 0 ? (
         <div className="overflow-x-auto rounded-xl border border-blue-100 shadow-xl bg-white">
           <table className="min-w-full text-sm text-gray-800">
             <thead className="bg-[#e7f1ff] text-[#023e7d] text-xs uppercase tracking-wider">
               <tr>
+                <th className="px-6 py-3 text-left">Leave Type</th> 
                 <th className="px-6 py-3 text-left">From</th>
                 <th className="px-6 py-3 text-left">To</th>
                 <th className="px-6 py-3 text-left">Reason</th>
@@ -55,15 +72,16 @@ const LeaveStatus = () => {
                   key={leave._id}
                   className="border-t hover:bg-blue-50 transition-all"
                 >
+                  <td className="px-6 py-4">{leave.leaveType}</td>
                   <td className="px-6 py-4">
-                    {new Date(leave.fromDate).toLocaleDateString('en-IN', {
+                    {new Date(leave.startDate).toLocaleDateString('en-IN', {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
                     })}
                   </td>
                   <td className="px-6 py-4">
-                    {new Date(leave.toDate).toLocaleDateString('en-IN', {
+                    {new Date(leave.endDate).toLocaleDateString('en-IN', {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',

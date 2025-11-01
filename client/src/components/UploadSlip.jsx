@@ -30,7 +30,7 @@ const UploadSlip = () => {
     formData.append('slip', file);
 
     try {
-      const res = await axios.post('http://localhost:3036/api/salary/upload', formData);
+      const res = await axios.post('https://hrms-system-9nvh.onrender.com/api/salary/upload', formData);
       setMsg('✅ Salary slip uploaded!');
       console.log(res.data);
     } catch (err) {
@@ -70,7 +70,7 @@ const UploadSlip = () => {
             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             <option value="">-- Select User ID --</option>
-            {/* TODO: Populate options from backend */}
+            
           </select>
         </div>
 
