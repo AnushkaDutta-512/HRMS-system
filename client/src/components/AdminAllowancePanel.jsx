@@ -180,7 +180,7 @@ const AdminAllowancePanel = () => {
 
                         <div className="flex flex-col items-center space-y-4">
                             {selectedProofs.map((file, index) => {
-                                const fileUrl = `http://localhost:3036/uploads/${file}`;
+                                const fileUrl = `https://hrms-system-9nvh.onrender.com/uploads/${file}`;
                                 const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(file);
 
                                 return (

@@ -23,7 +23,7 @@ const LeaveRequests = () => {
                 setError('Authentication token not found. Please log in as an admin.');
                 return;
             }
-            const res = await axios.get('http://localhost:3036/api/leave/all', {
+            const res = await axios.get('https://hrms-system-9nvh.onrender.com/api/leave/all', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setLeaves(res.data);

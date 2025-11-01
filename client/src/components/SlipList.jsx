@@ -11,7 +11,7 @@ const SlipList = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       const token = localStorage.getItem('token');
       const userId = user?.id || user?._id;
-      const res = await axios.get(`http://localhost:3036/api/salary/slips/${userId}`, {
+      const res = await axios.get(`https://hrms-system-9nvh.onrender.com/api/salary/slips/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSlips(res.data);

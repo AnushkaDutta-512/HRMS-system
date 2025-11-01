@@ -47,7 +47,7 @@ const ProfileCard = () => {
         <label htmlFor="upload" className="cursor-pointer block">
           {profilePic ? (
             <img
-              src={`http://localhost:3036/uploads/${profilePic}`}
+              src={`https://hrms-system-9nvh.onrender.com/uploads/${profilePic}`}
               alt="Profile"
               className="w-28 h-28 rounded-full object-cover border-4 border-[#0466c8] shadow-md hover:scale-105 transition duration-300 mx-auto"
               title="Click to update"

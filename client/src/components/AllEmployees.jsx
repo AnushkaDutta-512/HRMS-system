@@ -22,7 +22,7 @@ const AllEmployees = () => {
                     setError('Authentication token not found. Please log in again.');
                     return;
                 }
-    const res = await axios.get('http://localhost:3036/api/auth/employees', {
+    const res = await axios.get('https://hrms-system-9nvh.onrender.com/api/auth/employees', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setEmployees(res.data);

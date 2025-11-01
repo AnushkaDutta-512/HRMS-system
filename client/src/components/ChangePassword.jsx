@@ -25,7 +25,7 @@ const ChangePassword = () => {
 
     try {
       const res = await axios.put(
-        'http://localhost:3036/api/auth/change-password',
+        'https://hrms-system-9nvh.onrender.com/api/auth/change-password',
         { oldPassword, newPassword },
         {
           headers: {

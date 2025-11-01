@@ -186,7 +186,7 @@ const AdminDashboard = () => {
                                 <td className="px-6 py-3 font-medium text-gray-800 flex items-center gap-2">
                                     {emp.profilePic && (
                                         <img
-                                            src={`http://localhost:3036/uploads/${emp.profilePic}`}
+                                            src={`https://hrms-system-9nvh.onrender.com/uploads/${emp.profilePic}`}
                                             alt="Profile"
                                             className="w-8 h-8 rounded-full object-cover border"
                                         />
@@ -313,7 +313,7 @@ const AdminDashboard = () => {
                                     >
                                         <span className="font-medium text-gray-800">{slip.month} {slip.year}</span>
                                         <a
-                                            href={`http://localhost:3036/uploads/${slip.filePath}`}
+                                            href={`https://hrms-system-9nvh.onrender.com/uploads/${slip.filePath}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="text-blue-600 hover:underline text-sm"

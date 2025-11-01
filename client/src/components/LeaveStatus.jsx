@@ -24,7 +24,7 @@ const LeaveStatus = () => {
           return;
         }
 
-        const res = await axios.get(`http://localhost:3036/api/leave/my`, {
+        const res = await axios.get(`https://hrms-system-9nvh.onrender.com/api/leave/my`, {
           headers: { Authorization: `Bearer ${token}` }
         });
          setLeaves(res.data);

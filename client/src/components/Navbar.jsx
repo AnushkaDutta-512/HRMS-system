@@ -41,7 +41,7 @@ const Navbar = () => {
             <div className="flex items-center gap-3 text-[#001845] font-medium">
               {user.profilePic && (
                 <img
-                  src={`http://localhost:3036/uploads/${user.profilePic}`}
+                  src={`https://hrms-system-9nvh.onrender.com/uploads/${user.profilePic}`}
                   alt="Profile"
                   className="w-9 h-9 rounded-full object-cover border-2 border-[#0466c8]"
                 />
