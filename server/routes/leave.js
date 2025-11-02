@@ -1,8 +1,8 @@
 // server/routes/leave.js
 const express = require('express');
 const router = express.Router();
-const Leave = require('../models/leave');
-const User = require('../models/user'); // Import User model to update leave balance
+const Leave = require('../models/Leave');
+const User = require('../models/User'); // Import User model to update leave balance
 // Import consolidated middleware
 const { verifyToken, isAdmin } = require('../middleware/auth');
 
