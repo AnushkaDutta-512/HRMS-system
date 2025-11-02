@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User_temp");
+const User = require("../models/User");
 // Import the centralized middleware
 const { verifyToken, isAdmin } = require("../middleware/auth");
 const nodemailer = require('nodemailer'); // ✅ Import nodemailer
