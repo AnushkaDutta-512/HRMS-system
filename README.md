@@ -5,6 +5,13 @@ A full-stack **Human Resource Management System** (HRMS) designed for internal e
 This web app allows employees to mark attendance, apply for leave, and for HR to manage users, approve leaves, and send login credentials securely via email.
 
 ---
+🔐 Demo Login Credentials
+-Admin Login
+Email	anudutta885@gmail.com
+Password	3222321
+-Employee Login
+Email	anushka.23fe10cse00399@muj.manipal.edu
+Password	3222321
 
 ## 🚀 Features
 
