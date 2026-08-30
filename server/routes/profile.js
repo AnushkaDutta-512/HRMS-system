@@ -1,13 +1,19 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const User = require('../models/User');
 const SalarySlip = require('../models/SalarySlip');
 const router = express.Router();
 
+const profilePicsDir = path.join(__dirname, '../uploads/profile-pics');
+if (!fs.existsSync(profilePicsDir)) {
+  fs.mkdirSync(profilePicsDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/profile-pics');
+    cb(null, profilePicsDir);
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
@@ -22,45 +28,54 @@ const fileFilter = (req, file, cb) => {
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error('Only .jpg, .jpeg, .png, .webp files are allowed'));
+    cb(new Error('INVALID_FILE_TYPE'));
   }
 };
 
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 } // 2MB limit
-});
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+}).single('profilePic');
 
-
-router.post('/upload/:userId', upload.single('profilePic'), async (req, res) => {
-  try {
-    console.log('✅ Upload route hit');
-    console.log('📦 File received:', req.file);
-
-    const userId = req.params.userId;
-    const user = await User.findById(userId);
-
-    if (!user) {
-      console.error('❌ User not found in DB');
-      return res.status(404).json({ msg: 'User not found' });
+router.post('/upload/:userId', (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      if (err.message === 'INVALID_FILE_TYPE') {
+        return res.status(400).json({ msg: 'Invalid file format. Only JPG, PNG, and WEBP image files are allowed.' });
+      }
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ msg: 'File size too large. Maximum allowed size is 5MB.' });
+      }
+      return res.status(400).json({ msg: err.message || 'Error uploading file' });
     }
 
-    console.log('✅ User found:', user.email);
+    if (!req.file) {
+      return res.status(400).json({ msg: 'No file uploaded. Please select a valid image file.' });
+    }
 
-    user.profilePic = `profile-pics/${req.file.filename}`;
-    await user.save();
+    try {
+      const userId = req.params.userId;
+      const user = await User.findById(userId);
 
-    res.json({ msg: '✅ Profile picture uploaded', filename: req.file.filename });
-  } catch (err) {
-    console.error('❌ Upload failed on server:', err);
-    res.status(500).json({ msg: 'Upload failed', error: err.message });
-  }
+      if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+      }
+
+      user.profilePic = `profile-pics/${req.file.filename}`;
+      await user.save();
+
+      res.json({ msg: 'Profile picture uploaded successfully', filename: req.file.filename });
+    } catch (dbErr) {
+      console.error('❌ Database update failed:', dbErr);
+      res.status(500).json({ msg: 'Failed to update profile record in database' });
+    }
+  });
 });
 
 router.get('/all', async (req, res) => {
   try {
-    const users = await User.find(); 
+    const users = await User.find();
 
     const enriched = await Promise.all(
       users.map(async (user) => {
@@ -75,8 +90,6 @@ router.get('/all', async (req, res) => {
         };
       })
     );
-    console.log("📄 Enriched Users with Slips:", JSON.stringify(enriched, null, 2));
-
 
     res.json(enriched);
   } catch (error) {
@@ -84,7 +97,6 @@ router.get('/all', async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 });
-
 
 router.put('/update/:id', async (req, res) => {
   try {
@@ -107,7 +119,6 @@ router.put('/update/:id', async (req, res) => {
   }
 });
 
-
 router.delete('/delete/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -124,7 +135,5 @@ router.delete('/delete/:id', async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 });
-
-
 
 module.exports = router;

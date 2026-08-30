@@ -3,19 +3,23 @@ const router = express.Router();
 const Attendance = require('../models/Attendance');
 
 router.post('/mark', async (req, res) => {
-    console.log('📩 Mark request body:', req.body);
   const { userId, name, email } = req.body;
   const today = new Date().toISOString().split('T')[0];
 
   try {
-    const alreadyMarked = await Attendance.findOne({ userId, date: today });
+    const alreadyMarked = await Attendance.findOne({
+      $or: [
+        { userId: userId, date: today },
+        { email: email, date: today }
+      ]
+    });
     if (alreadyMarked) {
-      return res.status(400).json({ msg: 'Already marked today' });
+      return res.status(400).json({ msg: 'Attendance already marked for today' });
     }
 
     const attendance = new Attendance({ userId, name, email, date: today });
     await attendance.save();
-    res.status(201).json({ msg: 'Attendance marked', attendance });
+    res.status(201).json({ msg: 'Attendance marked successfully', attendance });
   } catch (err) {
     res.status(500).json({ msg: 'Failed to mark attendance', error: err.message });
   }

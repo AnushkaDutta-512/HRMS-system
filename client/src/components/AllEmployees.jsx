@@ -1,6 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../apiConfig';
 
 const AllEmployees = () => {
     const [employees, setEmployees] = useState([]);
@@ -11,7 +11,7 @@ const AllEmployees = () => {
         setError('');
 
         if (!user || user.role !== 'admin') {
-            setError('⛔ Access denied. Only administrators can view this page.');
+            setError('Access Denied: Only administrators can view this page.');
             return; 
         }
 
@@ -22,60 +22,79 @@ const AllEmployees = () => {
                     setError('Authentication token not found. Please log in again.');
                     return;
                 }
-    const res = await axios.get('https://hrms-system-9nvh.onrender.com/api/auth/employees', {
+                const res = await axios.get(`${API_BASE_URL}/api/auth/employees`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setEmployees(res.data);
+                setEmployees(res.data || []);
             } catch (err) {
                 console.error('Error fetching employees:', err);
-                setError(err.response?.data?.message || '❌ Error fetching employee data.');
+                setError(err.response?.data?.message || 'Error fetching employee data.');
             }
         };
 
         fetchEmployees();
-    }, [user]); 
-    if (error && error.includes('Access denied')) {
+    }, [user]);
+
+    if (error && error.includes('Access Denied')) {
         return (
-            <p className="text-red-600 text-center mt-6 text-lg">
-                {error}
-            </p>
+            <div className="max-w-md mx-auto mt-16 glass-panel p-8 rounded-3xl text-center">
+                <span className="material-symbols-rounded text-4xl text-red-400 mb-2">lock</span>
+                <h3 className="text-xl font-bold text-white mb-2">Access Restricted</h3>
+                <p className="text-base text-gray-300">{error}</p>
+            </div>
         );
     }
 
     return (
-        <div className="p-6 max-w-6xl mx-auto">
-            <h2 className="text-4xl font-extrabold text-center mb-10 text-[#002855]">👥 All Employees</h2>
+        <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
+            {/* Standard Uniform Module Header */}
+            <div className="mb-8">
+                <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight flex items-center gap-3">
+                    <span className="material-symbols-rounded text-brand-light text-4xl">groups</span>
+                    Employee Directory
+                </h2>
+                <p className="text-base text-gray-300 mt-2 font-sans">Directory and record management for all registered personnel</p>
+            </div>
 
-            {error && !error.includes('Access denied') && (
-                <p className="text-red-600 text-center font-medium mb-4">{error}</p>
+            {error && !error.includes('Access Denied') && (
+                <div className="mb-6 p-4.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-base font-semibold flex items-center gap-3">
+                    <span className="material-symbols-rounded text-2xl">error</span>
+                    <span>{error}</span>
+                </div>
             )}
 
             {employees.length === 0 ? (
-                <p className="text-gray-600 text-center text-lg">No employees found.</p>
+                <div className="glass-panel p-10 text-center rounded-3xl">
+                    <p className="text-gray-300 text-lg">No employees found in directory.</p>
+                </div>
             ) : (
-                <div className="overflow-x-auto bg-white rounded-2xl shadow-lg border border-blue-100">
-                    <table className="min-w-full text-sm text-left">
-                        <thead>
-                            <tr className="bg-[#e0efff] text-[#001845] uppercase text-xs font-semibold">
-                                <th className="px-6 py-4"> Employee ID</th> 
-                                <th className="px-6 py-4"> Name</th>
-                                <th className="px-6 py-4"> Email</th>
-                                <th className="px-6 py-4"> Date of Joining</th>
-                                <th className="px-6 py-4"> Salary (₹)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {employees.map((emp) => (
-                                <tr key={emp._id} className="border-t hover:bg-[#f0f8ff] transition duration-150">
-                                    <td className="px-6 py-4 font-medium text-gray-800">{emp.employeeId || 'N/A'}</td> {/* Display Employee ID */}
-                                    <td className="px-6 py-4 font-medium text-gray-800">{emp.name}</td>
-                                    <td className="px-6 py-4 text-gray-700">{emp.email}</td>
-                                    <td className="px-6 py-4 text-gray-600">{new Date(emp.dateOfJoining).toLocaleDateString() || 'N/A'}</td>
-                                    <td className="px-6 py-4 text-gray-700">{emp.salary || 'N/A'}</td>
+                <div className="glass-panel rounded-3xl overflow-hidden border border-dark-600/80 shadow-2xl bg-dark-900/85">
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full text-base text-left border-collapse">
+                            <thead>
+                                <tr className="bg-dark-800/95 text-gray-200 text-sm font-bold uppercase tracking-wider border-b border-dark-600/80">
+                                    <th className="px-6 py-5 font-bold">Employee ID</th> 
+                                    <th className="px-6 py-5 font-bold">Name</th>
+                                    <th className="px-6 py-5 font-bold">Email Address</th>
+                                    <th className="px-6 py-5 font-bold">Date of Joining</th>
+                                    <th className="px-6 py-5 font-bold">Base Salary</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="divide-y divide-dark-600/50">
+                                {employees.map((emp) => (
+                                    <tr key={emp._id} className="hover:bg-dark-700/50 transition-colors">
+                                        <td className="px-6 py-5 font-mono font-bold text-brand-light text-sm">{emp.employeeId || emp._id}</td>
+                                        <td className="px-6 py-5 font-bold text-white text-base">{emp.name}</td>
+                                        <td className="px-6 py-5 text-gray-200 font-mono text-sm">{emp.email}</td>
+                                        <td className="px-6 py-5 text-gray-300 font-mono text-sm">{emp.dateOfJoining ? new Date(emp.dateOfJoining).toLocaleDateString() : 'N/A'}</td>
+                                        <td className="px-6 py-5 text-emerald-400 font-mono font-extrabold text-lg">
+                                            {emp.salary ? `₹${Number(emp.salary).toLocaleString('en-IN')}` : 'N/A'}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
         </div>

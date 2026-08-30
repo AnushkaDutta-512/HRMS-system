@@ -120,6 +120,7 @@ router.post("/login", async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                employeeId: user.employeeId,
                 // Include leaveBalance in the user object sent to frontend for immediate access
                 leaveBalance: user.leaveBalance
             }
@@ -157,10 +158,30 @@ router.get("/me", verifyToken, async (req, res) => {
     }
 });
 
-// Change password for logged-in user
-router.post("/change-password", verifyToken, async (req, res) => {
+// Get single employee by ID
+router.get("/employee/:id", verifyToken, async (req, res) => {
     try {
-        const { currentPassword, newPassword } = req.body;
+        const user = await User.findById(req.params.id).select("-password");
+        if (!user) {
+            return res.status(404).json({ message: "Employee not found." });
+        }
+        res.json(user);
+    } catch (err) {
+        console.error("Error fetching employee:", err.message);
+        res.status(500).json({ message: "Server error fetching employee profile.", error: err.message });
+    }
+});
+
+// Change password for logged-in user (Supports POST and PUT, oldPassword and currentPassword)
+const changePasswordHandler = async (req, res) => {
+    try {
+        const currentPassword = req.body.currentPassword || req.body.oldPassword;
+        const { newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: "Both current password and new password are required." });
+        }
+
         const user = await User.findById(req.user.id);
 
         if (!user) {
@@ -183,7 +204,10 @@ router.post("/change-password", verifyToken, async (req, res) => {
         console.error("Error changing password:", err.message);
         res.status(500).json({ message: "Server error changing password.", error: err.message });
     }
-});
+};
+
+router.post("/change-password", verifyToken, changePasswordHandler);
+router.put("/change-password", verifyToken, changePasswordHandler);
 
 // Delete employee (admin only)
 router.delete("/employee/:id", verifyToken, isAdmin, async (req, res) => {

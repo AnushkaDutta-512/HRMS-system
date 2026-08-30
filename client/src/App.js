@@ -19,135 +19,139 @@ import AdminDashboard from './components/AdminDashboard';
 import EmployeeAllowanceForm from './components/EmployeeAllowanceForm';
 import AdminAllowancePanel from './components/AdminAllowancePanel';
 import ChangePassword from './components/ChangePassword';
+import WaveBackground from './components/WaveBackground';
 
 function App() {
     return (
-        <>
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route
-                    path="/welcome"
-                    element={
-                        <PrivateRoute roles={['admin', 'employee']}>
-                            <Welcome />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/change-password"
-                    element={
-                        <PrivateRoute roles={['admin', 'employee']}> {/* Both roles can change password */}
-                            <ChangePassword />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/profile"
-                    element={
-                        <PrivateRoute roles={['employee', 'admin']}>
-                            <ProfileCard />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/slips"
-                    element={
-                        <PrivateRoute roles={['employee', 'admin']}>
-                            <SlipList />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/admin-dashboard"
-                    element={
-                        <PrivateRoute roles={['admin']}>
-                            <AdminDashboard />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/upload"
-                    element={
-                        <PrivateRoute roles={['admin']}>
-                            <UploadSlip />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/leave-requests"
-                    element={
-                        <PrivateRoute roles={['admin']}>
-                            <LeaveRequests />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/attendance-records"
-                    element={
-                        <PrivateRoute roles={['admin']}>
-                            <AttendanceRecords />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/all-employees"
-                    element={
-                        <PrivateRoute roles={['admin']}>
-                            <AllEmployees />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/admin-allowance"
-                    element={
-                        <PrivateRoute roles={['admin']}>
-                            <AdminAllowancePanel />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/create-employee"
-                    element={
-                        <PrivateRoute roles={['admin']}>
-                            <AdminCreateEmployee />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/apply-leave"
-                    element={
-                        <PrivateRoute roles={['employee']}>
-                            <ApplyLeave />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/mark-attendance"
-                    element={
-                        <PrivateRoute roles={['employee']}>
-                            <MarkAttendance />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/my-leaves"
-                    element={
-                        <PrivateRoute roles={['employee']}>
-                            <LeaveStatus />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path="/apply-allowance"
-                    element={
-                        <PrivateRoute roles={['employee']}>
-                            <EmployeeAllowanceForm />
-                        </PrivateRoute>
-                    }
-                />
-            </Routes>
-        </>
+        <div className="min-h-screen flex flex-col relative overflow-hidden bg-dark-900 text-gray-200 selection:bg-brand-DEFAULT selection:text-white">
+            <WaveBackground backdropBlurAmount="md" />
+            <div className="relative z-10 flex-grow flex flex-col">
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Login />} />
+                    <Route
+                        path="/welcome"
+                        element={
+                            <PrivateRoute roles={['admin', 'employee']}>
+                                <Welcome />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/change-password"
+                        element={
+                            <PrivateRoute roles={['admin', 'employee']}>
+                                <ChangePassword />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/profile"
+                        element={
+                            <PrivateRoute roles={['employee', 'admin']}>
+                                <ProfileCard />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/slips"
+                        element={
+                            <PrivateRoute roles={['employee', 'admin']}>
+                                <SlipList />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin-dashboard"
+                        element={
+                            <PrivateRoute roles={['admin']}>
+                                <AdminDashboard />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/upload"
+                        element={
+                            <PrivateRoute roles={['admin']}>
+                                <UploadSlip />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/leave-requests"
+                        element={
+                            <PrivateRoute roles={['admin']}>
+                                <LeaveRequests />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/attendance-records"
+                        element={
+                            <PrivateRoute roles={['admin']}>
+                                <AttendanceRecords />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/all-employees"
+                        element={
+                            <PrivateRoute roles={['admin']}>
+                                <AllEmployees />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin-allowance"
+                        element={
+                            <PrivateRoute roles={['admin']}>
+                                <AdminAllowancePanel />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/create-employee"
+                        element={
+                            <PrivateRoute roles={['admin']}>
+                                <AdminCreateEmployee />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/apply-leave"
+                        element={
+                            <PrivateRoute roles={['employee']}>
+                                <ApplyLeave />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/mark-attendance"
+                        element={
+                            <PrivateRoute roles={['employee']}>
+                                <MarkAttendance />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/my-leaves"
+                        element={
+                            <PrivateRoute roles={['employee']}>
+                                <LeaveStatus />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/apply-allowance"
+                        element={
+                            <PrivateRoute roles={['employee']}>
+                                <EmployeeAllowanceForm />
+                            </PrivateRoute>
+                        }
+                    />
+                </Routes>
+            </div>
+        </div>
     );
 }
 

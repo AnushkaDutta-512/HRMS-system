@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const allowanceSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.Mixed,
         ref: 'User', // References the 'User' model
         required: true
     },
