@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config(); 
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const app = express();
 app.use(cors({
   origin: (origin, callback) => {
@@ -41,17 +41,13 @@ app.get('/', (req, res) => {
     res.send('HRMS Backend Running!');
 });
 
-const mongoURI = process.env.MONGO_URI;
-if (!mongoURI) {
-    console.error('❌ MONGO_URI is missing in .env file!');
-} else {
-    mongoose.connect(mongoURI)
-    .then(() => console.log('✅ Connected to MongoDB Atlas'))
-    .catch((err) => {
-        console.error('❌ MongoDB connection error:', err.message);
-        console.error('💡 Tip: Please check server/.env MONGO_URI credentials, IP whitelist (0.0.0.0/0), and database name.');
-    });
-}
+const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/hrms';
+mongoose.connect(mongoURI)
+.then(() => console.log('✅ Connected to MongoDB Database'))
+.catch((err) => {
+    console.error('❌ MongoDB connection error:', err.message);
+    console.error('💡 Tip: Please check server/.env MONGO_URI credentials, IP whitelist (0.0.0.0/0), or ensure MongoDB is running.');
+});
 
 const PORT = process.env.PORT || 3036; 
 app.listen(PORT, () => {

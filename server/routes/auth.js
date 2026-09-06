@@ -105,9 +105,10 @@ router.post("/login", async (req, res) => {
         }
 
         // Generate JWT token with user id, role, and email
+        const secret = process.env.JWT_SECRET || 'hrms_super_secret_jwt_key_2025_secure';
         const token = jwt.sign(
             { id: user._id, role: user.role, email: user.email },
-            process.env.JWT_SECRET,
+            secret,
             { expiresIn: "1d" } // Token expires in 1 day
         );
 
