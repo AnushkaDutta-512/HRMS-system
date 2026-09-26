@@ -123,12 +123,25 @@ const attendanceRoutes = require('./routes/attendance');
 const profileRoutes = require('./routes/profile');   
 
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
 app.use('/api/allowance', allowanceRoutes);
+app.use('/allowance', allowanceRoutes);
+
 app.use('/api/salary', salaryRoutes);
+app.use('/salary', salaryRoutes);
+
 app.use('/api/leave', leaveRoutes);
+app.use('/leave', leaveRoutes);
+
 app.use('/api/attendance', attendanceRoutes);
+app.use('/attendance', attendanceRoutes);
+
 app.use('/api/employees', profileRoutes);
+app.use('/employees', profileRoutes);
+
 app.use('/api/profile', profileRoutes);
+app.use('/profile', profileRoutes);
 
 // Serve static files in uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -145,12 +158,14 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date(), dbReadyState: mongoose.connection.readyState });
 });
 
-// Initial DB connect attempt
-connectDB().catch((err) => {
-  console.error('⚠️ Initial DB connect caught:', err.message);
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date(), dbReadyState: mongoose.connection.readyState });
 });
 
-if (require.main === module || process.env.NODE_ENV !== 'production') {
+if (require.main === module) {
+  connectDB().catch((err) => {
+    console.error('⚠️ Initial DB connect caught:', err.message);
+  });
   const PORT = process.env.PORT || 3036; 
   const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`✅ Server is running on port ${PORT} at http://localhost:${PORT}`);
@@ -158,4 +173,5 @@ if (require.main === module || process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = app;
+
 
