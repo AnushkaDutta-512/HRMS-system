@@ -43,6 +43,14 @@
       "dest": "/client/logo512.png"
     },
     {
+      "src": "/hr_illustration.png",
+      "dest": "/client/hr_illustration.png"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/client/robots.txt"
+    },
+    {
       "src": "/(.*)",
       "dest": "/client/$1",
       "check": true

@@ -1,6 +1,7 @@
-/*import React, { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../apiConfig';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -16,7 +17,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('https://hrms-system-9nvh.onrender.com/api/auth/register', {
+      const res = await axios.post(`${API_BASE_URL}/api/auth/register`, {
         name,
         email,
         password,
@@ -128,4 +129,3 @@ const Register = () => {
 };
 
 export default Register;
-*/
